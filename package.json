@@ -4,15 +4,19 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@statelyai/inspect": "^0.4.0",
     "@xstate/react": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "vite": "^5.4.11",
     "xstate": "^5.19.0"
   },
   "devDependencies": {
