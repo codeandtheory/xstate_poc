@@ -30,7 +30,6 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  justify-content: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -38,19 +37,4 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
-
-code {
-  font-family:
-    SFMono-Regular,
-    Consolas,
-    Liberation Mono,
-    Menlo,
-    Courier,
-    monospace;
-  font-size: 0.9em;
-  background: #f6f8fa;
-  padding: 0.2em 0.4em;
-  border: 1px solid #e1e4e8;
-  border-radius: 3px;
 }
