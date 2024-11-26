@@ -1,8 +1,7 @@
-import { createActor } from 'xstate';
+import { useRef, useEffect } from 'react';
 import { useMachine } from '@xstate/react';
 import { createBrowserInspector } from '@statelyai/inspect';
-import { feedbackMachine } from './feedbackMachine';
-
+import { machine } from './machine';
 import './App.css';
 
 const { inspect } = createBrowserInspector({
@@ -10,108 +9,83 @@ const { inspect } = createBrowserInspector({
   autoStart: false
 });
 
-function Feedback() {
-  const [state, send] = useMachine(feedbackMachine, {
-    inspect
-  });
+const VideoPlayer = ({ src }: { src: string }) => {
+  const videoElement = useRef(null);
+  const [state, send] = useMachine(machine.provide({
+    actions: {
+      playVideo: () => {
+        if (videoElement.current) {
+          (videoElement.current as HTMLVideoElement).play();
+        }
+      },
+      pauseVideo: () => {
+        if (videoElement.current) {
+          (videoElement.current as HTMLVideoElement).pause();
+        }
+      },
+      resetVideo: () => {
+        if (videoElement.current) {
+          (videoElement.current as HTMLVideoElement).pause();
+          (videoElement.current as HTMLVideoElement).currentTime = 0;
+          (videoElement.current as HTMLVideoElement).play();
+        }
+      },
+      stopVideo: () => {
+        if (videoElement.current) {
+          (videoElement.current as HTMLVideoElement).pause();
+          (videoElement.current as HTMLVideoElement).currentTime = (videoElement.current as HTMLVideoElement).duration;
+        }
+      }
+    }
+  }));
 
-  console.log("State:", state.value);
-
-  if (state.matches('closed')) {
-    return (
-      <div>
-        <em>Feedback form closed.</em>
-        <br />
-        <button
-          onClick={() => {
-            send({ type: 'restart' });
-          }}
-        >
-          Provide more feedback
-        </button>
-      </div>
-    );
-  }
-
+  const isPlaying = () => state.matches({ ready: "playing" });
+  const isPaused = () => state.matches({ ready: "paused" });
+  const isReady = () => state.matches("ready");
+  const isStoped = () => state.matches({ ready: "ended" });
+  console.log(state.value);
   return (
-    <div className="feedback">
-      <button
-        className="close-button"
-        onClick={() => {
-          send({ type: 'close' });
-        }}
+    <>
+      <video
+        src={src}
+        width={360}
+        onCanPlay={() => send({ type: "SUCCESS" })}
+        onError={() => send({ type: "FAILED" })}
+        ref={videoElement}
       >
-        Close
+        <track kind="captions" />
+      </video>
+      <br />
+
+      <button
+        onClick={() => {
+          send({ type: "PLAY" });
+        }}
+        disabled={isPlaying()}
+      >
+        Play
       </button>
-      {state.matches('prompt') && (
-        <div className="step">
-          <h2>How was your experience?</h2>
-          <button
-            className="button"
-            onClick={() => send({ type: 'feedback.good' })}
-          >
-            Good
-          </button>
-          <button
-            className="button"
-            onClick={() => send({ type: 'feedback.bad' })}
-          >
-            Bad
-          </button>
-        </div>
-      )}
 
-      {state.matches('thanks') && (
-        <div className="step">
-          <h2>Thanks for your feedback.</h2>
-          {state.context.feedback.length > 0 && (
-            <p>"{state.context.feedback}"</p>
-          )}
-        </div>
-      )}
+      <button onClick={() => send({ type: "PAUSE" })} disabled={isPaused() || isStoped()}>
+        Pause
+      </button>
 
-      {state.matches('form') && (
-        <form
-          className="step"
-          onSubmit={(ev) => {
-            ev.preventDefault();
-            send({
-              type: 'submit'
-            });
-          }}
-        >
-          <h2>What can we do better?</h2>
-          <textarea
-            name="feedback"
-            rows={4}
-            placeholder="So many things..."
-            onChange={(ev) => {
-              send({
-                type: 'feedback.update',
-                value: ev.target.value
-              });
-            }}
-          />
-          <button className="button" disabled={!state.can({ type: 'submit' })}>
-            Submit
-          </button>
-          <button
-            className="button"
-            type="button"
-            onClick={() => {
-              send({ type: 'back' });
-            }}
-          >
-            Back
-          </button>
-        </form>
-      )}
-    </div>
+      <button onClick={() => send({ type: "RESET" })} disabled={!isReady()}>
+        Reset
+      </button>
+
+      <button onClick={() => send({ type: "END" })} disabled={!isReady()}>
+        Stop
+      </button>
+    </>
   );
-}
+};
 
 function App() {
-  return <Feedback />;
+  return (
+  <VideoPlayer
+    src="https://media.istockphoto.com/id/1455262570/video/scenic-view-of-camper-van-on-road-in-norway.mp4?s=mp4-640x640-is&k=20&c=uoeliCPfcMZUDTJopLTVTObOTFffaAFTDFtrAvbZQcE="
+  />);
 }
 
 export default App;
