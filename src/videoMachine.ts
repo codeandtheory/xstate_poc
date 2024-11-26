@@ -1,5 +1,21 @@
-import { createMachine,  } from 'xstate';
-export const machine = createMachine({
+import { createMachine, assign, setup  } from 'xstate';
+
+interface VideoContext {
+  src: string;
+}
+
+export const videoPlayerMachine = setup({
+  types: {
+    context: {} as VideoContext,
+    events: {} as
+      | { type: 'SUCCESS' }
+      | { type: 'FAILED' }
+      | { type: 'PLAY' }
+      | { type: 'PAUSE' }
+      | { type: 'RESET' }
+      | { type: 'END' }
+  },
+}).createMachine({
   id: "playerMachine",
   initial: "waiting",
   states: {
@@ -69,4 +85,4 @@ export const machine = createMachine({
       }
     }
   }
-});
+})

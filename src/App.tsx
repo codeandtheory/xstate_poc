@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useMachine } from '@xstate/react';
 import { createBrowserInspector } from '@statelyai/inspect';
-import { machine } from './machine';
+import { videoPlayerMachine } from './videoMachine';
 import './App.css';
 
 const { inspect } = createBrowserInspector({
@@ -11,7 +11,7 @@ const { inspect } = createBrowserInspector({
 
 const VideoPlayer = ({ src }: { src: string }) => {
   const videoElement = useRef(null);
-  const [state, send] = useMachine(machine.provide({
+  const [state, send] = useMachine(videoPlayerMachine.provide({
     actions: {
       playVideo: () => {
         if (videoElement.current) {
