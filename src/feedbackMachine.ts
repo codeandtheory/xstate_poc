@@ -34,8 +34,8 @@ export const feedbackMachine = setup({
   states: {
     prompt: {
       on: {
-        'feedback.good': 'thanks',
-        'feedback.bad': 'form'
+        'feedback.good': 'thanks', // feedback.good
+        'feedback.bad': 'form'    //  feedback.bad
       }
     },
     form: {
@@ -65,6 +65,6 @@ export const feedbackMachine = setup({
     }
   },
   on: {
-    close: '.closed'
+    close: 'closed'
   }
 });

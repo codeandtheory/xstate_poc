@@ -14,7 +14,6 @@ function Feedback() {
   const [state, send] = useMachine(feedbackMachine, {
     inspect
   });
-
   console.log("State:", state.value);
 
   if (state.matches('closed')) {
