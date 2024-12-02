@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react';
-import { machine2 } from './machine2';
+import { machine2 } from './feedbackMachine2';
 import './App.css'
 
 function Feedback() {
@@ -44,9 +44,7 @@ function Feedback() {
   const [state, send] = useMachine(machine2);
   console.log("state: ", state.value);
   if (state.matches('prompt')) {
-    return (
-      <FeedbackPrompt/>
-    )
+    return (<FeedbackPrompt/>)
   } else if (state.matches('form')) {
     return (<FeedbackForm/>);
   } else if (state.matches('thanks')) {

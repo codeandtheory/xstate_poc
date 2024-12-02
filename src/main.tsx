@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
 import './style.css';
-import Feedback from './Feedback';
+import { TraffiLightComponent } from './TrafficLightComponent';
+// import App from './App';
+// import Feedback from './Feedback';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Feedback></Feedback>
+    <TraffiLightComponent/>
   </React.StrictMode>
 );

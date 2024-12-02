@@ -9,10 +9,10 @@ export const machine2 = createMachine({
   },
   states: {
     prompt: {
-        on: {
-          'good': 'thanks',
-          'bad': 'form'     
-        }
+      on: {
+        'good': 'thanks',
+        'bad': 'form'     
+      }
     },
     form: { 
       on: {
