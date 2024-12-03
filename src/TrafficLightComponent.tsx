@@ -20,7 +20,6 @@ export const TraffiLightComponent = () => {
     send({type: event});
   }
 
-
   function triggerChangeLight(color: col) {
     console.log('triggerChangeLight ', state.value);
     if (color === "red") {
@@ -44,7 +43,7 @@ export const TraffiLightComponent = () => {
 
   const [state, send, actorRef] = useMachine(trafficLightMachine);
   useEffect(() => {
-    timerId = triggerChangeLight('red');
+    timerId = triggerChangeLight(currentColor);
 
     return () => {
       clearTimeout(timerId);
@@ -53,7 +52,6 @@ export const TraffiLightComponent = () => {
 
   useEffect(() => {
     const subscription = actorRef.subscribe((snapshot) => {
-      console.log("updating..");
       currentColor = snapshot.value as col;
       triggerChangeLight(currentColor);
     });
@@ -66,17 +64,12 @@ export const TraffiLightComponent = () => {
 
   return (
     <>
-      <h3>State:{`${state.value}`}</h3> 
+    <h3>State:{`${state.value}`}</h3> 
       <div className="lights">
-        <div className={`light-red light ${state.value == 'red' ? 'on' : 'off'}`}>
+        <div className={`light-red light    ${state.value == 'red' ? 'on' : 'off'}`}></div>
+        <div className={`light-green light  ${state.value == 'green' ? 'on' : 'off'}`}></div>
+        <div className={`light-yellow light ${state.value == 'yellow' ? 'on' : 'off'}`}></div>
       </div>
-      <div className={`light-green light ${state.value == 'green' ? 'on' : 'off'}`}>
-
-      </div>
-      <div className={`light-yellow light ${state.value == 'yellow' ? 'on' : 'off'}`}>
-
-      </div>
-    </div>
     </>
   )
 }

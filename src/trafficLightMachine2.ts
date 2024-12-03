@@ -22,25 +22,3 @@ export const trafficLightMachine = createMachine({
     },
   }
 })
-
-// export const trafficLightMachine = createMachine({
-//   id: 'trafficLight',
-//   initial: 'red',
-//   states: {
-//     green: {
-//       on: {
-//         TIMER: 'yellow',
-//       },
-//     },
-//     yellow: {
-//       on: {
-//         TIMER: 'red',
-//       },
-//     },
-//     red: {
-//       on: {
-//         TIMER: 'green',
-//       },
-//     },
-//   },
-// });
